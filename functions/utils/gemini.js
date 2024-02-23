@@ -8,10 +8,10 @@ const textOnly = async (prompt) => {
   return result.response.text();
 };
 
-const multimodal = async (imageBinary) => {
+const multimodal = async (imageBinary,txtpromt) => {
   // For text-and-image input (multimodal), use the gemini-pro-vision model
   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
-  const prompt = "Please help describe this picture.";
+  const prompt = txtpromt;//
   const mimeType = "image/png";
 
   // Convert image binary to a GoogleGenerativeAI.Part object.
