@@ -1,7 +1,7 @@
 const { onRequest } = require("firebase-functions/v2/https");
 const line = require("./utils/line");
 const gemini = require("./utils/gemini");
-const stock = require("./utils/stock");
+const stock = require("./stock");
 
 exports.webhook = onRequest(async (req, res) => {
   if (req.method === "POST") {
@@ -14,7 +14,7 @@ exports.webhook = onRequest(async (req, res) => {
             // const msg = await gemini.textOnly(event.message.text);
             if (event.message.text.indexOf("#") >= 0) {
               const stockname = event.message.text.replace("#", "");
-              const [imageBinary,imgUrl] = await stock.getStockImageBinary(stockname);
+              const [imageBinary,imgUrl] = await stock.getStockImageBinaryV2(stockname);
               const msg = await gemini.multimodal(imageBinary,"อธิบายกราฟของหุ้นตัวนี้ ตามเทคนิค ให้หน่อย");
               await line.reply(event.replyToken, [{
                 type: "image",
