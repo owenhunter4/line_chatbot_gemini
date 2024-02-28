@@ -38,7 +38,9 @@ exports.webhook = onRequest(async (req, res) => {
               const stockname = event.message.text.replace(">", "");
               const [imageBinary,imgUrl,imgUrlNews, imgUrlNews2] = await stock.getStockImageBinaryV2(stockname);
               const msg = await gemini.multimodal(imageBinary,"อธิบายกราฟของหุ้นตัวนี้ ตามเทคนิค ให้หน่อย");
-              await line.multicast(["Udae3cf4851a4764c2e0b160ce72145c6","Ude9e37d09f1f738d153a55f6e28e7623"], [{
+              await line.multicast(["Udae3cf4851a4764c2e0b160ce72145c6","Ude9e37d09f1f738d153a55f6e28e7623"], [
+                { type: "text", text: stockname },
+                {
                 type: "image",
                 originalContentUrl: imgUrl,
                 previewImageUrl: imgUrl
