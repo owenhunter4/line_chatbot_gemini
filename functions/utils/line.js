@@ -24,4 +24,22 @@ const reply = (token, payload) => {
   });
 };
 
-module.exports = { getImageBinary, reply };
+const push = (userId, payload) => {
+  return axios({
+    method: "post",
+    url: "https://api.line.me/v2/bot/message/push",
+    headers: LINE_HEADER,
+    data: { to: userId, messages: payload }
+  });
+};
+
+const multicast = (userIds, payload) => {
+  return axios({
+    method: "post",
+    url: "https://api.line.me/v2/bot/message/multicast",
+    headers: LINE_HEADER,
+    data: { to: userIds, messages: payload }
+  });
+};
+
+module.exports = { getImageBinary, reply, push, multicast };

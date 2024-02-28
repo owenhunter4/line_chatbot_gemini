@@ -61,27 +61,71 @@ const getStockImageUrl = async (stockname) => {
 
 const getStockImageBinaryV2 = async (stockname) => {
     console.log("stockname === > " + stockname);
-    const imgBuffer = await scrnShot(stockname);
-    const imgUrl = await urlImage(imgBuffer, new Date().toString() + "--" + stockname);
+    const imgBuffer = await scrnShot(stockname, "graph");
+    const imgBufferNews = await scrnShot(stockname, "news");
+    const imgBufferNews2 = await scrnShot(stockname, "news2");
+    const dName = new Date().getTime();
+    const imgUrl = await urlImage(imgBuffer, dName + "/graph--" + stockname);
+    const imgUrlNews = await urlImage(imgBufferNews, dName + "/news--" + stockname);
+    const imgUrlNews2 = await urlImage(imgBufferNews2, dName + "/news2--" + stockname);
     console.log("imgUrl === > " + imgUrl);
-    const originalImage = await axios({
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: imgUrl,
-        headers: {},
-        responseType: "arraybuffer"
-    })
+    console.log("imgUrlNews === > " + imgUrlNews);
+    console.log("imgUrlNews2 === > " + imgUrlNews2);
+    // const originalImage = await axios({
+    //     method: 'get',
+    //     maxBodyLength: Infinity,
+    //     url: imgUrl,
+    //     headers: {},
+    //     responseType: "arraybuffer"
+    // })
 
-    return [originalImage.data, imgUrl];
+    //return [originalImage.data, imgUrl];
+    return [imgBuffer, imgUrl, imgUrlNews, imgUrlNews2];
 }
 
 
-const scrnShot = async (stockname) => {
+const scrnShot = async (stockname, content) => {
     const browser = await puppeteer.launch({
         args: ['--no-sandbox']
     });
     const page = await browser.newPage();
-    await page.goto("https://th.tradingview.com/chart/?symbol=SET%3A" + stockname, { waitUntil: 'networkidle2' });
+    // await page.setViewport({
+    //     width: 1920,
+    //     height: 1080,
+    //     deviceScaleFactor: 1,
+    // });
+    switch (content) {
+        case "graph":
+            await page.setViewport({
+                width: 1920,
+                height: 1080,
+                deviceScaleFactor: 1,
+            });
+            await page.goto("https://th.tradingview.com/chart/?symbol=SET%3A" + stockname, { waitUntil: 'networkidle2' });
+            break;
+        case "news":
+            await page.setViewport({
+                width: 1024,
+                height: 1100,
+                deviceScaleFactor: 1,
+            });
+            await page.goto("https://www.infoquest.co.th/?s=" + stockname, { waitUntil: 'networkidle2' });
+            break;
+        case "news2":
+            await page.setViewport({
+                width: 1440,
+                height: 1500,
+                deviceScaleFactor: 1,
+            });
+            await page.goto("https://www.kaohoon.com/?s=" + stockname, { waitUntil: 'networkidle2' });
+            break;
+
+        default:
+            await page.goto("https://www.google.com/search?q=" + stockname, { waitUntil: 'networkidle2' });
+            break;
+
+
+    }
 
     const buffer = await page.screenshot();
 
@@ -99,11 +143,8 @@ const urlImage = async (buffer, filename) => {
     const bucket = storage.bucket(BUCKET_NAME);
 
     const file = bucket.file(filename);
-    await uploadBufferImage(file, buffer, filename);
 
-    await file.makePublic();
-
-    const urlImg = `https://${BUCKET_NAME}.storage.googleapis.com/${filename}`;
+    const urlImg = await uploadBufferImage(file, buffer, filename);;
 
     console.log("urlImg === >" + urlImg);
 
@@ -112,12 +153,32 @@ const urlImage = async (buffer, filename) => {
 
 const uploadBufferImage = async (file, buffer, filename) => {
     return new Promise((resolve) => {
-        file.save(buffer, { destination: filename }, () => {
-            resolve();
+        const gTime = new Date().getTime();
+        const cache_file_options = {
+            metadata: {
+                destination: filename,
+                contentType: "image/jpeg",
+                resumable: false,
+                cacheControl: 'no-cache',
+                metadata: {
+                    firebaseStorageDownloadTokens: gTime,
+                }
+            }
+        };
+        file.save(buffer, cache_file_options, () => {
+            const downLoadPath =
+                "https://firebasestorage.googleapis.com/v0/b/linegemini-4523d.appspot.com/o/";
+
+            const imageUrl =
+                downLoadPath +
+                encodeURIComponent(filename) +
+                "?alt=media&token=" +
+                gTime;
+            resolve(imageUrl);
         });
     })
 }
 
 
 
-module.exports = { getStockImageBinary,getStockImageBinaryV2 };
+module.exports = { getStockImageBinary, getStockImageBinaryV2 };

@@ -45,6 +45,7 @@ const multimodal = async (imageBinary,txtpromt) => {
 
   const result = await model.generateContent([prompt, ...imageParts], safetySettings);
   const text = result.response.text();
+  console.log(JSON.stringify(result.response.candidates));
   return text;
 };
 
