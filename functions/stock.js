@@ -146,7 +146,7 @@ const urlImage = async (buffer, filename) => {
 
     const urlImg = await uploadBufferImage(file, buffer, filename);;
 
-    console.log("urlImg === >" + urlImg);
+    //console.log("urlImg === >" + urlImg);
 
     return urlImg;
 }
