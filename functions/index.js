@@ -4,7 +4,7 @@ const gemini = require("./utils/gemini");
 const stock = require("./stock");
 const dataconnect = require("./utils/dataconnect");
 
-exports.webhook = onRequest({ memory: "4GiB", timeoutSeconds: 540, },async (req, res) => {
+exports.webhook = onRequest({ memory: "4GiB", timeoutSeconds: 540, }, async (req, res) => {
   if (req.method === "POST") {
     const events = req.body.events;
     for (const event of events) {
@@ -25,7 +25,7 @@ exports.webhook = onRequest({ memory: "4GiB", timeoutSeconds: 540, },async (req,
 
                 {
                   "type": "flex",
-                  "altText": "Monthly Report",
+                  "altText": "Graph",
                   "contents": {
                     "type": "bubble",
                     "size": "giga",
@@ -46,7 +46,7 @@ exports.webhook = onRequest({ memory: "4GiB", timeoutSeconds: 540, },async (req,
 
                 {
                   "type": "flex",
-                  "altText": "Monthly Report",
+                  "altText": "New2",
                   "contents": {
                     "type": "bubble",
                     "size": "giga",
@@ -54,7 +54,7 @@ exports.webhook = onRequest({ memory: "4GiB", timeoutSeconds: 540, },async (req,
                       "type": "image",
                       "url": imgUrlNews2,
                       "size": "full",
-                      "aspectRatio": "20:13",
+                      "aspectRatio": "50:50",
                       "aspectMode": "fit",
                       "action": {
                         "type": "uri",
@@ -65,7 +65,7 @@ exports.webhook = onRequest({ memory: "4GiB", timeoutSeconds: 540, },async (req,
                 },
                 {
                   "type": "flex",
-                  "altText": "Monthly Report",
+                  "altText": "New1",
                   "contents": {
                     "type": "bubble",
                     "size": "giga",
@@ -73,7 +73,7 @@ exports.webhook = onRequest({ memory: "4GiB", timeoutSeconds: 540, },async (req,
                       "type": "image",
                       "url": imgUrlNews,
                       "size": "full",
-                      "aspectRatio": "20:13",
+                      "aspectRatio": "50:50",
                       "aspectMode": "fit",
                       "action": {
                         "type": "uri",
