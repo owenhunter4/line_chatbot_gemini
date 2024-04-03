@@ -28,7 +28,7 @@ const getStockImageUrl = async (stockname) => {
     let data = JSON.stringify({
         "format": "png",
         "full_page": true,
-        "url": "https://th.tradingview.com/chart/?symbol=SET%3A" + stockname,
+        "url": "https://www.tradingview.com/chart/?symbol=SET%3A" + stockname,
         "wait_until": "requestsfinished",
         "auto_crop": true
     });
@@ -97,11 +97,11 @@ const scrnShot = async (stockname, content) => {
     switch (content) {
         case "graph":
             await page.setViewport({
-                width: 1920,
-                height: 1080,
+                width: 1450,
+                height: 880,
                 deviceScaleFactor: 1,
             });
-            await page.goto("https://th.tradingview.com/chart/?symbol=SET%3A" + stockname, { waitUntil: 'networkidle2' });
+            await page.goto("https://www.tradingview.com/chart/?symbol=SET%3A" + stockname, { waitUntil: 'networkidle2' });
             break;
         case "news":
             await page.setViewport({
