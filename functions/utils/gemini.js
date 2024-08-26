@@ -9,7 +9,7 @@ const textOnly = async (prompt) => {
 };
 
 const multimodal = async (imageBinary,txtpromt) => {
-  // For text-and-image input (multimodal), use the gemini-pro-vision model
+  // For text-and-image input (multimodal), use the gemini-1.5-flash model
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const prompt = txtpromt;//
   const mimeType = "image/png";
