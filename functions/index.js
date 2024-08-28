@@ -20,7 +20,7 @@ exports.webhook = onRequest({ memory: "4GiB", timeoutSeconds: 540, }, async (req
             if (event.message.text.indexOf("#") >= 0) {
               const stockname = event.message.text.replace("#", "");
               const [imageBinary, imgUrl, imgUrlNews, imgUrlNews2] = await stock.getStockImageBinaryV2(stockname);
-              const msg = await gemini.multimodal(imageBinary, "อธิบายกราฟของหุ้นตัวนี้ ตามเทคนิค ให้หน่อย และบอกข้อมูลของ Volumn, RSI, MACD");
+              //const msg = await gemini.multimodal(imageBinary, "อธิบายกราฟของหุ้นตัวนี้ ตามเทคนิค ให้หน่อย และบอกข้อมูลของ Volumn, RSI, MACD");
               await line.reply(event.replyToken, [
 
                 {
@@ -42,7 +42,7 @@ exports.webhook = onRequest({ memory: "4GiB", timeoutSeconds: 540, }, async (req
                     }
                   }
                 },
-                { type: "text", text: msg },
+                //{ type: "text", text: msg },
 
                 {
                   "type": "flex",
